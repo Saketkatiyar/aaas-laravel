@@ -40,7 +40,36 @@ class MemberController extends Controller
     public function account(): View|RedirectResponse
     {
         if (!session('member_id')) return redirect('/login');
-        return view('member.account', ['member' => DB::table('oc_customer')->where('customer_id', session('member_id'))->firstOrFail()]);
+        return redirect('/account/profile');
+    }
+
+    public function profile(): View|RedirectResponse
+    {
+        if (!session('member_id')) return redirect('/login');
+        $member = DB::table('oc_customer')->where('customer_id', session('member_id'))->firstOrFail();
+        return view('member.account', ['member' => $member, 'membership' => DB::table('oc_customer_type')->where('id', $member->type)->first(), 'states' => DB::table('oc_zone')->where('country_id', 99)->orderBy('name')->get(), 'zones' => DB::table('oc_zonal')->orderBy('id')->get()]);
+    }
+
+    public function updateProfile(Request $request): RedirectResponse
+    {
+        if (!session('member_id')) return redirect('/login');
+        $member = DB::table('oc_customer')->where('customer_id', session('member_id'))->firstOrFail();
+        $data = $request->validate(['firstname'=>['required','string','max:32'],'lastname'=>['required','string','max:32'],'email'=>['required','email','max:96'],'email2'=>['nullable','email','max:62'],'telephone'=>['required','string','min:3','max:32'],'mobile'=>['nullable','string','max:32'],'designation'=>['nullable','string','max:255'],'fpsi'=>['nullable','string','max:255'],'specialization'=>['nullable','string','max:255'],'allied'=>['nullable','string','max:255'],'anydetail'=>['nullable','string','max:255'],'add1'=>['nullable','string'],'add2'=>['nullable','string'],'add3'=>['nullable','string'],'pincode'=>['nullable','string','max:255'],'city'=>['nullable','string','max:255'],'state'=>['nullable','string','max:255'],'zone'=>['nullable','string','max:255']]);
+        if (strcasecmp($member->email, $data['email']) !== 0 && DB::table('oc_customer')->whereRaw('LOWER(email) = ?', [strtolower($data['email'])])->exists()) return back()->withErrors(['email'=>'A member already uses this email address.'])->withInput();
+        DB::table('oc_customer')->where('customer_id', $member->customer_id)->update($data);
+        session(['member_name'=>trim($data['firstname'].' '.$data['lastname'])]);
+        return redirect('/account/profile')->with('success','Your account details have been updated.');
+    }
+
+    public function passwordForm(): View|RedirectResponse { return session('member_id') ? view('member.password') : redirect('/login'); }
+
+    public function updatePassword(Request $request): RedirectResponse
+    {
+        if (!session('member_id')) return redirect('/login');
+        $data = $request->validate(['password'=>['required','string','min:4','max:40','confirmed']]);
+        $salt = Str::random(9);
+        DB::table('oc_customer')->where('customer_id', session('member_id'))->update(['salt'=>$salt,'password'=>sha1($salt.sha1($salt.sha1($data['password']))),'code'=>'']);
+        return redirect('/account/profile')->with('success','Your password has been updated.');
     }
 
     public function logout(Request $request): RedirectResponse { $request->session()->forget(['member_id', 'member_name']); return redirect('/'); }

@@ -1,0 +1,4 @@
+@extends('layouts.public')
+@section('content')
+<main class="container my-5" style="max-width:720px"><div class="card shadow-sm"><div class="card-body p-md-4"><h1 class="h3 mb-4">Change Password</h1><form method="post" action="/account/password">@csrf<div class="mb-3"><label class="form-label">New Password</label><input class="form-control @error('password') is-invalid @enderror" name="password" type="password" required><div class="form-text">Password must be 4–40 characters.</div>@error('password')<div class="invalid-feedback">{{ $message }}</div>@enderror</div><div class="mb-4"><label class="form-label">Confirm Password</label><input class="form-control" name="password_confirmation" type="password" required></div><button class="btn btn-success">Save</button> <a class="btn btn-outline-secondary" href="/account/profile">Back</a></form></div></div></main>
+@endsection
