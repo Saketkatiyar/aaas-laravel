@@ -38,7 +38,8 @@ Route::get('/index.php', function () {
     return app(PublicSiteController::class)->showNews($id);
 });
 
-foreach (['aboutus', 'executive_council', 'membership', 'publication', 'conference', 'aaasawards', 'contactus'] as $page) {
+// Awards and elections are intentionally disabled until the client requests this module.
+foreach (['aboutus', 'executive_council', 'membership', 'publication', 'conference', 'contactus'] as $page) {
     Route::get("/{$page}", fn () => app(PublicSiteController::class)->page($page));
 }
 

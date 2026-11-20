@@ -40,7 +40,8 @@
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"><span class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse" id="mainNav">
                 <ul class="navbar-nav mx-auto">
-                    @foreach (['Home'=>'home','About Us'=>'aboutus','Executive Council'=>'executive_council','Membership'=>'membership','Publications'=>'publication','Conferences'=>'conference','Awards'=>'aaasawards','Downloads'=>'downloads','Gallery'=>'gallery','Videos'=>'videos'] as $label => $path)
+                    {{-- Awards/elections are intentionally hidden until this module is reactivated. --}}
+                    @foreach (['Home'=>'home','About Us'=>'aboutus','Executive Council'=>'executive_council','Membership'=>'membership','Publications'=>'publication','Conferences'=>'conference','Downloads'=>'downloads','Gallery'=>'gallery','Videos'=>'videos'] as $label => $path)
                         <li class="nav-item"><a class="nav-link px-3 py-2 {{ request()->is($path) ? 'active' : '' }}" href="{{ url($path) }}">{{ $label }}</a></li>
                     @endforeach
                     <li class="nav-item"><a class="nav-link px-3 py-2" href="{{ url('search') }}"><i class="bi bi-search"></i></a></li>

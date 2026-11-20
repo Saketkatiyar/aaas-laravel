@@ -19,7 +19,8 @@ class AdminController extends Controller
         'books' => ['table' => 'oc_books', 'label' => 'Books', 'primary' => 'id', 'fields' => ['title', 'subtitle', 'editors', 'year', 'price', 'isbn', 'image', 'about', 'contents']],
         'reports' => ['table' => 'oc_report', 'label' => 'Reports', 'primary' => 'id', 'fields' => ['title', 'image', 'upload']],
         'publication-abstracts' => ['table' => 'oc_abstract', 'label' => 'Publication abstracts', 'primary' => 'id', 'fields' => ['title', 'image', 'upload']],
-        'awards' => ['table' => 'oc_awards', 'label' => 'Awards', 'primary' => 'id', 'fields' => ['name', 'type', 'year', 'guidlines', 'awardees', 'status']],
+        // Awards/elections are dormant for this release. Preserve their tables and code for later reactivation.
+        // 'awards' => ['table' => 'oc_awards', 'label' => 'Awards', 'primary' => 'id', 'fields' => ['name', 'type', 'year', 'guidlines', 'awardees', 'status']],
         'videos' => ['table' => 'oc_videos', 'label' => 'Videos', 'primary' => 'id', 'fields' => ['title', 'url', 'sort']],
         'gallery' => ['table' => 'oc_gallery', 'label' => 'Gallery', 'primary' => 'id', 'fields' => ['title', 'date']],
         'homepage-content' => ['table' => 'oc_newsletter_editors', 'label' => 'Homepage content', 'primary' => 'id', 'creatable' => false, 'fields' => ['notice']],

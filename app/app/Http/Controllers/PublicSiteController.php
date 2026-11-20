@@ -17,7 +17,8 @@ class PublicSiteController extends Controller
 
     public function page(string $page): View
     {
-        $pages = ['aboutus' => 79, 'executive_council' => 80, 'membership' => 81, 'conference' => 82, 'contactus' => 83, 'publication' => 84, 'aaasawards' => 85];
+        // Awards/elections remain in the legacy database but are dormant for this release.
+        $pages = ['aboutus' => 79, 'executive_council' => 80, 'membership' => 81, 'conference' => 82, 'contactus' => 83, 'publication' => 84];
 
         abort_unless(isset($pages[$page]), 404);
 
@@ -52,7 +53,7 @@ class PublicSiteController extends Controller
         $term = trim((string) request('q'));
         $results = collect();
         if ($term !== '') {
-            $results = DB::table('oc_information_description')->where('language_id', 1)->where(fn ($query) => $query->where('title', 'like', "%{$term}%")->orWhere('description', 'like', "%{$term}%"))->get(['information_id as id', 'title', 'description'])->map(fn ($row) => (object) ['title' => $row->title, 'excerpt' => \App\Support\ContentHtml::preview($row->description), 'url' => match ((int) $row->id) {79 => '/aboutus',80 => '/executive_council',81 => '/membership',82 => '/conference',83 => '/contactus',84 => '/publication',85 => '/aaasawards',default => '/'}]);
+            $results = DB::table('oc_information_description')->where('language_id', 1)->where('information_id', '!=', 85)->where(fn ($query) => $query->where('title', 'like', "%{$term}%")->orWhere('description', 'like', "%{$term}%"))->get(['information_id as id', 'title', 'description'])->map(fn ($row) => (object) ['title' => $row->title, 'excerpt' => \App\Support\ContentHtml::preview($row->description), 'url' => match ((int) $row->id) {79 => '/aboutus',80 => '/executive_council',81 => '/membership',82 => '/conference',83 => '/contactus',84 => '/publication',default => '/'}]);
         }
         return view('public.search', compact('term', 'results'));
     }
