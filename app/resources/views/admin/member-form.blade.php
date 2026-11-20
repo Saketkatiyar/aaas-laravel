@@ -1,6 +1,7 @@
 @extends('admin.layout')
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-3"><h1 class="h3">Edit Member</h1><a class="btn btn-outline-secondary" href="{{route('admin.resource.index','members')}}">Back to Members</a></div>
+@if((int) $member->status === 0)<form class="mb-3" method="post" action="{{ route('admin.member.approve', $member->customer_id) }}">@csrf<button class="btn btn-success" type="submit">Approve member and enable login</button></form>@endif
 <form method="post" action="{{route('admin.resource.update',['members',$member->customer_id])}}">@csrf @method('put')
     <ul class="nav nav-tabs mb-3" role="tablist"><li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#general" type="button">General</button></li><li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#membership" type="button">Membership</button></li></ul>
     <div class="tab-content">

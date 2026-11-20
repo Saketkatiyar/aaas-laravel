@@ -15,9 +15,11 @@ class MemberController extends Controller
     public function login(Request $request): RedirectResponse
     {
         $data = $request->validate(['email' => ['required', 'email'], 'password' => ['required', 'string']]);
-        $member = DB::table('oc_customer')->where('email', $data['email'])->where('status', 1)->first();
+        $member = DB::table('oc_customer')->whereRaw('LOWER(email) = ?', [strtolower($data['email'])])->first();
+        if ($member && !$member->status) return back()->withErrors(['email' => 'Your account requires approval before you can sign in.'])->onlyInput('email');
         $hash = $member ? sha1($member->salt . sha1($member->salt . sha1($data['password']))) : '';
-        if (!$member || !hash_equals($member->password, $hash)) return back()->withErrors(['email' => 'Invalid email or password.'])->onlyInput('email');
+        $legacyHash = md5($data['password']);
+        if (!$member || !hash_equals($member->password, $hash) && !hash_equals($member->password, $legacyHash)) return back()->withErrors(['email' => 'Invalid email or password.'])->onlyInput('email');
         $request->session()->regenerate();
         session(['member_id' => $member->customer_id, 'member_name' => trim($member->firstname . ' ' . $member->lastname)]);
         return redirect('/account');

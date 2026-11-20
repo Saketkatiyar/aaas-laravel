@@ -146,6 +146,13 @@ class AdminController extends Controller
         return redirect()->route('admin.resource.index', $resource)->with('success', 'Updated.');
     }
 
+    public function approveMember(int $id): RedirectResponse
+    {
+        if ($redirect = $this->redirectIfGuest()) return $redirect;
+        DB::table('oc_customer')->where('customer_id', $id)->update(['status' => 1]);
+        return redirect()->route('admin.resource.edit', ['resource' => 'members', 'id' => $id])->with('success', 'Member approved and login enabled.');
+    }
+
     private function updateMember(Request $request, int $id): RedirectResponse
     {
         $data = $request->validate([

@@ -18,7 +18,9 @@ return [
     |
     */
 
-    'driver' => env('SESSION_DRIVER', 'database'),
+    // This project shares an imported legacy database that has no Laravel sessions table.
+    // File sessions keep local/staging admin actions independent from that legacy schema.
+    'driver' => env('SESSION_DRIVER', 'file'),
 
     /*
     |--------------------------------------------------------------------------

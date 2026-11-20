@@ -51,6 +51,7 @@ Route::get('/admin/conferences/{id}/abstracts', [AdminController::class, 'confer
 Route::get('/admin/conferences/{id}/download', [AdminController::class, 'conferenceDownload'])->name('admin.conference.download');
 Route::get('/admin/conference-users/{id}', [AdminController::class, 'conferenceRegistrant'])->name('admin.conference.registrant');
 Route::get('/admin/conference-users/{id}/abstracts', [AdminController::class, 'conferenceAbstractPreview'])->name('admin.conference.abstract.preview');
+Route::post('/admin/members/{id}/approve', [AdminController::class, 'approveMember'])->name('admin.member.approve');
 Route::get('/admin/{resource}', [AdminController::class, 'index'])->name('admin.resource.index');
 Route::get('/admin/{resource}/create', [AdminController::class, 'create'])->name('admin.resource.create');
 Route::post('/admin/{resource}', [AdminController::class, 'store'])->name('admin.resource.store');
