@@ -1,0 +1,9 @@
+@extends('admin.layout')
+
+@section('content')
+<h1 class="h3 mb-3">Conferences</h1>
+<div class="table-responsive"><table class="table table-striped bg-white align-middle"><thead><tr><th class="text-center">Year</th><th>Title</th><th>URL</th><th class="text-center">Status</th><th class="text-center">Action</th></tr></thead><tbody>
+@forelse($items as $conference)<tr><td class="text-center">{{ $conference->year }}<br><small class="text-muted">ID: {{ $conference->id }}</small></td><td>{{ $conference->title }}</td><td><a target="_blank" href="https://conference.aaasindia.org/{{ $conference->url }}/{{ $conference->suburl }}">https://conference.aaasindia.org/{{ $conference->url }}/{{ $conference->suburl }}</a></td><td class="text-center">{{ $conference->status ? 'Enable' : 'Disable' }}</td><td class="text-center text-nowrap"><form class="d-inline" method="post" action="{{ route('admin.resource.destroy', ['resource' => 'conferences', 'id' => $conference->id]) }}" onsubmit="return confirm('Delete this conference?')">@csrf @method('delete')<button class="btn btn-sm btn-outline-danger" title="Delete">Delete</button></form> <a class="btn btn-sm btn-outline-success" title="Edit" href="{{ route('admin.resource.edit', ['resource'=>'conferences','id'=>$conference->id]) }}">Edit</a> <a class="btn btn-sm btn-info text-white" title="Registration Details" href="{{ route('admin.conference.registrations', $conference->id) }}">Registrations</a> <a class="btn btn-sm btn-info text-white" title="Abstract Details" href="{{ route('admin.conference.abstracts', $conference->id) }}">Abstracts</a> <a class="btn btn-sm btn-info text-white" title="Download Abstracts" href="{{ route('admin.conference.download', $conference->id) }}">Download</a></td></tr>
+@empty<tr><td colspan="5">No conferences.</td></tr>@endforelse
+</tbody></table></div>
+@endsection

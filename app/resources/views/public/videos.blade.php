@@ -1,0 +1,1 @@
+@extends('layouts.public') @section('content')<main class="container my-5"><h1 class="h2 text-success mb-4">Videos</h1><div class="list-group">@forelse($videos as $video)<a class="list-group-item list-group-item-action" target="_blank" href="{{$video->url}}">{{$video->title}}</a>@empty<p>No videos available.</p>@endforelse</div></main>@endsection

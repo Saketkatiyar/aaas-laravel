@@ -1,0 +1,2 @@
+@extends('layouts.public')
+@section('content')<main class="container my-5"><h1 class="h2 text-success mb-4">Downloads</h1><div class="list-group">@foreach($downloads as $download)<a class="list-group-item list-group-item-action" href="{{ asset('image/' . $download->upload) }}" target="_blank">{{ $download->title }} <span class="text-muted small">{{ \Carbon\Carbon::parse($download->date_added)->format('d M Y') }}</span></a>@endforeach</div></main>@endsection

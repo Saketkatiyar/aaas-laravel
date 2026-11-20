@@ -1,0 +1,2 @@
+@extends('layouts.public')
+@section('content')<main class="container my-5"><h1 class="h2 text-success mb-4">Latest News</h1>@foreach($items as $item)<article class="border-bottom py-3"><h2 class="h5"><a href="{{ url('news/' . $item->id) }}">{{ \App\Support\ContentHtml::decode($item->title) }}</a></h2><div class="text-muted small">{{ \Carbon\Carbon::parse($item->date)->format('d M Y') }}</div></article>@endforeach</main>@endsection
